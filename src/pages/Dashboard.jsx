@@ -10,6 +10,7 @@ import {
   updateProfile,
   seedAPI // Import seedAPI
 } from '../services/api';
+import { getAuthData } from '../utils/auth';
 
 // ==========================================
 // 1. DASHBOARD HOME (Bento Grid)
@@ -29,7 +30,7 @@ function DashboardHome() {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const storedAuth = JSON.parse(localStorage.getItem('authData') || '{}');
+        const storedAuth = getAuthData();
         const studentId = storedAuth.studentId;
 
         const [att, marksData, feesData] = await Promise.all([
@@ -263,7 +264,7 @@ function AttendancePage() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const storedAuth = JSON.parse(localStorage.getItem('authData') || '{}');
+        const storedAuth = getAuthData();
         const data = await getAttendanceForStudent(storedAuth.studentId);
         if (!data || !data.subjects) {
           setAttendance({ subjects: [], overall: { attendedClasses: 0, totalClasses: 0, percentage: 0 } });
@@ -326,7 +327,7 @@ function MarksPage() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const storedAuth = JSON.parse(localStorage.getItem('authData') || '{}');
+        const storedAuth = getAuthData();
         const data = await getMarksForStudent(storedAuth.studentId);
         setMarksData(data);
         if (data.semesters && data.semesters.length > 0) {
@@ -553,7 +554,7 @@ function ProfilePage() {
   const [msg, setMsg] = useState({ type: '', text: '' });
 
   useEffect(() => {
-    const storedAuth = JSON.parse(localStorage.getItem('authData') || '{}');
+    const storedAuth = getAuthData();
     getProfileForStudent(storedAuth.studentId).then(setProfile).catch(console.error);
   }, []);
 
