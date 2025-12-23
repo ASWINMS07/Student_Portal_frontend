@@ -1,5 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-const API_URL = `${BASE_URL}/profile`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_URL = `${BASE_URL}/api/profile`;
 
 // Get profile from backend
 export async function getProfileForStudent(studentId) {

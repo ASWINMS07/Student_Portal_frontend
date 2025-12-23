@@ -9,8 +9,8 @@ export * from './timetableService';
 export * from './profileService';
 export * from './studentService';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-const API_SEED = `${BASE_URL}/seed`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_SEED = `${BASE_URL}/api/seed`;
 
 const getHeaders = () => {
   const token = localStorage.getItem('token');

@@ -1,5 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-const API_COURSES = `${BASE_URL}/courses`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_COURSES = `${BASE_URL}/api/courses`;
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');

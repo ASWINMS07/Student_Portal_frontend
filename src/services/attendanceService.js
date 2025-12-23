@@ -7,8 +7,8 @@ const getHeaders = () => {
   };
 };
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-const API_ATTENDANCE = `${BASE_URL}/attendance`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_ATTENDANCE = `${BASE_URL}/api/attendance`;
 
 // Get structured attendance for a single student (used by student dashboard)
 // This calls the backend route for "me" basically.
