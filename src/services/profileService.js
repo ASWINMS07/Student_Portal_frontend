@@ -1,5 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_URL = `${BASE_URL}/api/profile`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_URL = `${BASE_URL}/profile`;
 
 // Get profile from backend
 export async function getProfileForStudent(studentId) {
@@ -16,10 +16,7 @@ export async function getProfileForStudent(studentId) {
     }
   });
 
-  const contentType = response.headers.get("content-type");
-  if (!contentType || !contentType.includes("application/json")) {
-    throw new Error("Received non-JSON response from server");
-  }
+
 
   const data = await response.json();
 
@@ -51,10 +48,7 @@ export async function updateProfile(studentId, updates) {
     body: JSON.stringify(updates)
   });
 
-  const contentType = response.headers.get("content-type");
-  if (!contentType || !contentType.includes("application/json")) {
-    throw new Error("Received non-JSON response from server");
-  }
+
 
   const data = await response.json();
 

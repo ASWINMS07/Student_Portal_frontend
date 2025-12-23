@@ -9,8 +9,8 @@ export * from './timetableService';
 export * from './profileService';
 export * from './studentService';
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_SEED = `${BASE_URL}/api/seed`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_SEED = `${BASE_URL}/seed`;
 
 const getHeaders = () => {
   const token = localStorage.getItem('token');
@@ -28,12 +28,7 @@ export const seedAPI = {
         headers: getHeaders()
       });
 
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await response.text();
-        console.error("Non-JSON response:", text.substring(0, 500));
-        throw new Error("Received non-JSON response (likely HTML) from server");
-      }
+
 
       if (!response.ok) {
         const err = await response.json();

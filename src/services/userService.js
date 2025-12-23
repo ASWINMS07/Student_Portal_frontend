@@ -1,5 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_URL = `${BASE_URL}/api/auth`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_URL = `${BASE_URL}/auth`;
 
 /**
  * Register a new student
@@ -14,12 +14,7 @@ export async function registerStudent(userData) {
     body: JSON.stringify(userData),
   });
 
-  const contentType = response.headers.get("content-type");
-  if (!contentType || !contentType.includes("application/json")) {
-    const text = await response.text();
-    console.error("Non-JSON response:", text.substring(0, 500));
-    throw new Error("Received non-JSON response (likely HTML) from server");
-  }
+
 
   const data = await response.json();
 
@@ -49,12 +44,7 @@ export async function loginUser({ email, studentId, password, role }) {
     body: JSON.stringify({ identifier, password }),
   });
 
-  const contentType = response.headers.get("content-type");
-  if (!contentType || !contentType.includes("application/json")) {
-    const text = await response.text();
-    console.error("Non-JSON response:", text.substring(0, 500));
-    throw new Error("Received non-JSON response (likely HTML) from server");
-  }
+
 
   const data = await response.json();
 

@@ -7,8 +7,8 @@ const getHeaders = () => {
   };
 };
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API_ATTENDANCE = `${BASE_URL}/api/attendance`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_ATTENDANCE = `${BASE_URL}/attendance`;
 
 // Get structured attendance for a single student (used by student dashboard)
 // This calls the backend route for "me" basically.
@@ -37,10 +37,7 @@ export async function getAttendanceForStudent(studentId) {
       headers: getHeaders()
     });
 
-    const contentType = response.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new Error("Received non-JSON response from server");
-    }
+
 
     if (!response.ok) throw new Error('Failed to fetch attendance');
     return await response.json();
@@ -70,10 +67,7 @@ export async function getAttendanceRecordsForStudent(userId) {
       headers: getHeaders()
     });
 
-    const contentType = response.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new Error("Received non-JSON response from server");
-    }
+
 
     // The backend currently returns { subjects: [], overall: ... }
     // AdminAttendance expects an array of records [ { subject, attendedClasses, ... } ]
@@ -112,10 +106,7 @@ export async function updateAttendanceRecord(updatedRecord) {
       body: JSON.stringify(payload)
     });
 
-    const contentType = response.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new Error("Received non-JSON response from server");
-    }
+
 
     if (!response.ok) throw new Error("Failed update");
     return await response.json();
