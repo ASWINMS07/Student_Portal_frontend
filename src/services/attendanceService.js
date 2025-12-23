@@ -7,7 +7,8 @@ const getHeaders = () => {
   };
 };
 
-const API_ATTENDANCE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api') + '/attendance';
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_ATTENDANCE = `${BASE_URL}/api/attendance`;
 
 // Get structured attendance for a single student (used by student dashboard)
 // This calls the backend route for "me" basically.
@@ -35,6 +36,12 @@ export async function getAttendanceForStudent(studentId) {
     const response = await fetch(API_ATTENDANCE, {
       headers: getHeaders()
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error('Failed to fetch attendance');
     return await response.json();
   } catch (error) {
@@ -62,6 +69,12 @@ export async function getAttendanceRecordsForStudent(userId) {
     const response = await fetch(`${API_ATTENDANCE}?userId=${userId}`, {
       headers: getHeaders()
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     // The backend currently returns { subjects: [], overall: ... }
     // AdminAttendance expects an array of records [ { subject, attendedClasses, ... } ]
     // The backend `subjects` array matches this structure closely.
@@ -98,6 +111,11 @@ export async function updateAttendanceRecord(updatedRecord) {
       headers: getHeaders(),
       body: JSON.stringify(payload)
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
 
     if (!response.ok) throw new Error("Failed update");
     return await response.json();

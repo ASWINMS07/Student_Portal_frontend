@@ -1,4 +1,5 @@
-const API_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api') + '/user/students';
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = `${BASE_URL}/api/user/students`;
 
 // Helper to get headers with token
 const getHeaders = () => {
@@ -15,6 +16,12 @@ export async function getAllStudents() {
       method: 'GET',
       headers: getHeaders()
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error('Failed to fetch students');
     return await response.json();
   } catch (error) {
@@ -28,6 +35,12 @@ export async function getStudentById(studentId) {
     const response = await fetch(`${API_URL}/${studentId}`, {
       headers: getHeaders()
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error('Student not found');
     return await response.json();
   } catch (error) {
@@ -44,6 +57,12 @@ export async function updateStudent(id, updates) {
       headers: getHeaders(),
       body: JSON.stringify(updates)
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error('Failed to update student');
     return await response.json();
   } catch (error) {
@@ -58,6 +77,12 @@ export async function deleteStudent(id) {
       method: 'DELETE',
       headers: getHeaders()
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error('Failed to delete student');
     return true;
   } catch (error) {

@@ -1,4 +1,5 @@
-const API_FEES = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api') + '/fees';
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_FEES = `${BASE_URL}/api/fees`;
 const getHeaders = () => {
   const token = localStorage.getItem('token');
   return {
@@ -10,6 +11,12 @@ const getHeaders = () => {
 export async function getFeesRecordsForStudent(userId) {
   try {
     const response = await fetch(`${API_FEES}?userId=${userId}`, { headers: getHeaders() });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) return [];
     const data = await response.json();
     // Backend returns { fees: [], summary: {} }
@@ -22,6 +29,12 @@ export async function getFeesRecordsForStudent(userId) {
 export async function getStudentFees() {
   try {
     const response = await fetch(API_FEES, { headers: getHeaders() });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error('Failed to fetch fees');
     return await response.json();
   } catch (e) {
@@ -36,6 +49,12 @@ export async function updateFeeRecord(updatedRecord) {
       headers: getHeaders(),
       body: JSON.stringify(updatedRecord)
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error("Failed update");
     return await response.json();
   } catch (e) {

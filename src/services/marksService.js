@@ -1,4 +1,5 @@
-const API_MARKS = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api') + '/marks';
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_MARKS = `${BASE_URL}/api/marks`;
 const getHeaders = () => {
   const token = localStorage.getItem('token');
   return {
@@ -12,6 +13,12 @@ export async function getMarksForStudent(studentId) {
   // studentId ignored if using req.userId in backend for student role
   try {
     const response = await fetch(API_MARKS, { headers: getHeaders() });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error("Failed to fetch marks");
     return await response.json(); // Returns { semesters: [...] }
   } catch (e) {
@@ -26,6 +33,12 @@ export async function getMarksForStudent(studentId) {
 async function fetchStudentMarks(userId) {
   try {
     const response = await fetch(`${API_MARKS}?userId=${userId}`, { headers: getHeaders() });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) return { semesters: [] };
     return await response.json();
   } catch (e) {
@@ -54,6 +67,12 @@ export async function updateMarkRecord(updatedRecord) {
       headers: getHeaders(),
       body: JSON.stringify(updatedRecord)
     });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Received non-JSON response from server");
+    }
+
     if (!response.ok) throw new Error("Failed update");
     return await response.json();
   } catch (e) {

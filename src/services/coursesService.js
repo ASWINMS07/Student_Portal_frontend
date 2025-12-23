@@ -1,4 +1,5 @@
-const API_COURSES = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api') + '/courses';
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_COURSES = `${BASE_URL}/api/courses`;
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');
@@ -11,6 +12,12 @@ const getHeaders = () => {
 export async function getCoursesForStudent() {
     try {
         const response = await fetch(API_COURSES, { headers: getHeaders() });
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Received non-JSON response from server");
+        }
+
         if (!response.ok) throw new Error('Failed to fetch courses');
         return await response.json();
     } catch (err) {
@@ -26,6 +33,12 @@ export async function updateCourse(courseData) {
             headers: getHeaders(),
             body: JSON.stringify(courseData)
         });
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Received non-JSON response from server");
+        }
+
         if (!response.ok) {
             const err = await response.json();
             throw new Error(err.message || 'Failed to update course');
@@ -42,6 +55,12 @@ export async function deleteCourse(id) {
             method: 'DELETE',
             headers: getHeaders()
         });
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Received non-JSON response from server");
+        }
+
         if (!response.ok) throw new Error('Failed to delete course');
         return await response.json();
     } catch (err) {
