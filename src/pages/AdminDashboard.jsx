@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminStudents from './AdminStudents';
 import AdminAttendance from './AdminAttendance';
 import AdminMarks from './AdminMarks';
@@ -6,23 +7,21 @@ import AdminFees from './AdminFees';
 import AdminCourses from './AdminCourses';
 import AdminTimetable from './AdminTimetable';
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ onLogout }) {
   const [activePage, setActivePage] = useState('dashboard');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
 
     if (!token || role !== 'admin') {
-      window.location.href = '/';
+      navigate('/');
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('authData');
-    localStorage.removeItem('role');
-    window.location.href = '/';
+    onLogout();
   };
 
   const navItems = [
@@ -112,8 +111,8 @@ export default function AdminDashboard() {
               key={item.id}
               onClick={() => setActivePage(item.id)}
               className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-medium transition-all duration-200 group ${activePage === item.id
-                  ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                 }`}
             >
               <svg

@@ -33,6 +33,7 @@ export default function Login({ onLoginSuccess, onSwitchToSignup }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setMessage('');
 
     if (!validate()) return;

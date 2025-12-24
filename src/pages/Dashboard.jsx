@@ -613,13 +613,11 @@ function ProfilePage() {
 // ==========================================
 // 8. MAIN DASHBOARD WRAPPER
 // ==========================================
-export default function Dashboard() {
+export default function Dashboard({ onLogout }) {
   const [activePage, setActivePage] = useState('dashboard');
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('authData');
-    window.location.href = '/login';
+    onLogout();
   };
 
   const renderPage = () => {
